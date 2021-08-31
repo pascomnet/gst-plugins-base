@@ -58,6 +58,8 @@ struct _GstRTPDummyHdrExt
 
   gchar *direction;
   gchar *attributes;
+
+  gsize max_size;
 };
 
 struct _GstRTPDummyHdrExtClass
@@ -130,6 +132,7 @@ gst_rtp_dummy_hdr_ext_init (GstRTPDummyHdrExt * dummy)
 {
   dummy->supported_flags =
       GST_RTP_HEADER_EXTENSION_ONE_BYTE | GST_RTP_HEADER_EXTENSION_TWO_BYTE;
+  dummy->max_size = 1;
 }
 
 static void
@@ -163,7 +166,9 @@ static gsize
 gst_rtp_dummy_hdr_ext_get_max_size (GstRTPHeaderExtension * ext,
     const GstBuffer * input_meta)
 {
-  return 1;
+  GstRTPDummyHdrExt *dummy = GST_RTP_DUMMY_HDR_EXT (ext);
+
+  return dummy->max_size;
 }
 
 #define TEST_DATA_BYTE 0x9d
